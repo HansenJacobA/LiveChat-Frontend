@@ -58,17 +58,18 @@ export default function chat() {
                 </div>
               );
             })}
-            <button
-              type="button"
-              className="btn-sml scrollToBottom-btn"
-              onClick={() => { scrollToBottom(); }}
-              id="scrollToBottom-btn"
-            >
-              Scroll to bottom
-            </button>
           </div>
         </div>
       </div>
+
+      <button
+        type="button"
+        className="btn-sml scrollToBottom-btn"
+        onClick={() => { scrollToBottom(); }}
+        id="scrollToBottom-btn"
+      >
+        Scroll to bottom
+      </button>
 
       <br />
 
