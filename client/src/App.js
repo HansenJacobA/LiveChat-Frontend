@@ -4,6 +4,8 @@ import './App.scss';
 import Home from './components/home/home';
 import Login from './components/login/login';
 import Chat from './components/chat/chat';
+import Lobby from './components/lobby/lobby';
+import Play from './components/play/play';
 
 export default function App() {
   return (
@@ -11,6 +13,8 @@ export default function App() {
       <Route exact path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/chat" element={<Chat />} />
+      <Route path="/lobby" element={<Lobby />} />
+      <Route path="/play" element={<Play />} />
     </Routes>
   );
 }

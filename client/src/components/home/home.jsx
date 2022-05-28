@@ -25,6 +25,15 @@ export default function home() {
           <button type="button" className="btn-sml btn-dark"> Guest </button>
         </Link>
       </div>
+
+      <br />
+
+      <div className="row">
+        <Link to="/lobby">
+          <button type="button" className="btn-sml btn-dark"> Play RPS </button>
+        </Link>
+      </div>
+
     </div>
   );
 }

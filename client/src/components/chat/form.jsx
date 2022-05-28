@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import useStore from '../store';
 
 export default function form() {
-  const [message, setmessage] = useState('');
+  const addMessage = useStore((state) => state.addMessage);
+  const scrollToBottom = useStore((state) => state.scrollToBottom);
+  const [message, setMessage] = useState('');
 
-  // useEffect(() => {
-  //   console.log('message ', message);
-  // }, []);
+  useEffect(() => {
+    scrollToBottom();
+  }, [message]);
 
   return (
     <div className="container">
@@ -14,9 +17,11 @@ export default function form() {
 
         <div className="col-10">
           <input
+            className="w-100"
+            value={message}
             type="text"
             placeholder="message"
-            onChange={(e) => { setmessage(e.target.value); }}
+            onChange={(e) => { setMessage(e.target.value); }}
           />
         </div>
 
@@ -24,7 +29,12 @@ export default function form() {
           <button
             type="button"
             className="btn-sml btn-dark"
-            onClick={() => { console.log(message); }}
+            onClick={() => {
+              if (message !== '') {
+                addMessage(message);
+                setMessage('');
+              }
+            }}
           >
             submit
           </button>

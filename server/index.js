@@ -23,5 +23,5 @@ app.use('/', (req, res) => {
 });
 
 app.listen((PORT), () => {
-  console.log(`ent listening on port ${PORT}!`);
+  console.log(`Client listening on port ${PORT}!`);
 });
