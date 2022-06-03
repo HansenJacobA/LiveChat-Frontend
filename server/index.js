@@ -1,8 +1,20 @@
-const io = require('socket.io')(3000, {
-  cors: {
-    origin: '*',
-  },
-});
+const express = require('express');
+
+const app = express();
+const httpServer = require('http').createServer(app);
+const { Server } = require('socket.io');
+
+const io = new Server(httpServer);
+
+// const io = require('socket.io')(3000, {
+//   cors: {
+//     origin: '*',
+//   },
+// });
+
+app.use(express.static(`${__dirname}/../client/dist`));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 let guestCounter = 1;
 const usernames = {};
@@ -34,3 +46,5 @@ io.on('connection', (socket) => {
     }
   });
 });
+
+httpServer.listen(3000, () => console.log('listening on port 3000'));
