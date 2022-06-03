@@ -1,27 +1,36 @@
-const axios = require('axios');
-const path = require('path');
-const express = require('express');
-require('dotenv').config();
-
-const { PORT, TOKEN } = process.env;
-
-const app = express();
-
-app.use(express.static(path.join(__dirname, './client/dist')));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.use('/', (req, res) => {
-  const { method } = req;
-  const url = `http://localhost:3000${req.originalUrl}`;
-  const headers = { Authorization: TOKEN };
-  const data = req.body;
-  axios({
-    method, url, headers, data,
-  }).then((result) => { res.send(result.data); })
-    .catch((err) => res.send(err));
+const io = require('socket.io')(3000, {
+  cors: {
+    origin: '*',
+  },
 });
 
-app.listen((PORT), () => {
-  console.log(`Client listening on port ${PORT}!`);
+let guestCounter = 1;
+const usernames = {};
+const storage = [];
+
+io.on('connection', (socket) => {
+  const { id } = socket;
+
+  socket.on('send-message', (message) => {
+    if (usernames[id] !== undefined) {
+      const name = usernames[id];
+      storage.push({ name, message });
+      io.emit('stored-messages', storage);
+    }
+  });
+
+  socket.on('upload-messages', () => {
+    io.emit('stored-messages', storage);
+  });
+
+  socket.on('make-name', (name) => {
+    if (usernames[id] === undefined) {
+      if (name === id) {
+        usernames[id] = `guest${guestCounter}`;
+        guestCounter += 1;
+      } else {
+        usernames[id] = name;
+      }
+    }
+  });
 });

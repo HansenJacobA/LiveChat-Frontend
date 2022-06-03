@@ -1,21 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import useStore from '../store';
 import './login.scss';
 
 export default function login() {
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  useEffect(() => {
-    // axios.post('/login', { username, password })
-    //   .catch((err) => console.log(err));
-  }, []);
+  const socket = useStore((state) => state.socket);
 
   return (
-    <div className="container-login">
+    <div className="container login">
       <div className="row">
-        <h1> Enter your username and password! 🫣 </h1>
+        <h1> Your name, darling? </h1>
       </div>
 
       <br />
@@ -24,21 +19,17 @@ export default function login() {
       <div className="row">
         <div className="col">
           <input
+            value={username}
             type="text"
-            placeholder="username"
-            onChange={(e) => { setUsername(e.target.value); }}
-          />
-        </div>
-      </div>
-
-      <br />
-
-      <div className="row">
-        <div className="col">
-          <input
-            type="text"
-            placeholder="password"
-            onChange={(e) => { setPassword(e.target.value); }}
+            placeholder="call me.."
+            onChange={(e) => {
+              if (username.length <= 10) {
+                setUsername(e.target.value);
+                return;
+              }
+              alert('Shorter name, please.');
+              setUsername('');
+            }}
           />
         </div>
       </div>
@@ -48,7 +39,19 @@ export default function login() {
       <div className="row">
         <div className="col">
           <Link to="/chat">
-            <button type="button" className="btn-sml btn-dark">Sign In</button>
+            <button
+              type="button"
+              className="btn btn-dark"
+              onClick={() => {
+                if (username === '') {
+                  socket.emit('make-name', socket.id);
+                  return;
+                }
+                socket.emit('make-name', username);
+              }}
+            >
+              🗣 ... 👤
+            </button>
           </Link>
         </div>
       </div>

@@ -3,6 +3,7 @@
   padding: 10px;
   text-align: left;
   max-width: 600px;
+  border-radius: 10px;
 }
 
 .container-messages {
@@ -11,6 +12,7 @@
   padding: 20px;
   overflow-y: scroll;
   overflow-wrap: break-word;
+  border-radius: 10px;
 }
 
 .msg {
@@ -22,4 +24,8 @@
   opacity: 50%;
   font-size: 75%;
   display: none;
+}
+
+h1 {
+  text-align: center;
 }

@@ -1,13 +1,12 @@
-import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useRef, useState, useEffect } from 'react';
 import './chat.scss';
 import Form from './form';
 import useStore from '../store';
 
 export default function chat() {
-  const messages = useStore((state) => state.messages);
+  const [messages, setMessages] = useState([]);
   const scrollToBottom = useStore((state) => state.scrollToBottom);
-
+  const socket = useStore((state) => state.socket);
   const listInnerRef = useRef();
 
   const onScroll = () => {
@@ -21,17 +20,21 @@ export default function chat() {
     }
   };
 
+  socket.on('stored-messages', (storedMessages) => {
+    setMessages(storedMessages);
+    scrollToBottom();
+  });
+
+  useEffect(() => {
+    socket.emit('upload-messages');
+  }, []);
+
   return (
-    <div className="container-chat">
+    <div className="container-chat mw-100">
 
       <div className="row">
-        <div className="col-10">
-          <h1> You are in the chat room! 👀 </h1>
-        </div>
-        <div className="col-2">
-          <Link to="/">
-            <button type="button" className="btn-sml btn-dark"> Home </button>
-          </Link>
+        <div className="col">
+          <h1> 🐸 Share some 🫖 </h1>
         </div>
       </div>
 
@@ -42,22 +45,24 @@ export default function chat() {
             onScroll={onScroll}
             ref={listInnerRef}
           >
-            {messages.map((msg, i) => {
+
+            {messages.map((obj, i) => {
               if (i >= messages.length - 1) {
                 return (
-                  <div className="row msg" key={JSON.stringify(msg + i)}>
-                    <div className="col-3"> name </div>
-                    <div className="col-9" id="last-msg">{msg}</div>
+                  <div className="row msg" id="last-msg" key={JSON.stringify(obj + i)}>
+                    <div className="col-3">{obj.name}</div>
+                    <div className="col-9">{obj.message}</div>
                   </div>
                 );
               }
               return (
-                <div className="row msg" key={JSON.stringify(msg + i)}>
-                  <div className="col-3"> name </div>
-                  <div className="col-9">{msg}</div>
+                <div className="row msg" key={JSON.stringify(obj + i)}>
+                  <div className="col-3">{obj.name}</div>
+                  <div className="col-9">{obj.message}</div>
                 </div>
               );
             })}
+
           </div>
         </div>
       </div>
@@ -75,7 +80,7 @@ export default function chat() {
 
       <div className="row">
         <div className="col">
-          <Form />
+          <Form socket={socket} />
         </div>
       </div>
     </div>

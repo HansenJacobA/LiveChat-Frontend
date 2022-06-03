@@ -1,7 +1,9 @@
 // What are the essential mobile scss requirements?
-.container-home {
+.home {
+  width: 400px;
   height: 50%;
   border: 1px solid black;
   text-align: center;
   padding: 10px;
+  border-radius: 10px;
 }
