@@ -2,15 +2,19 @@ const express = require('express');
 
 const app = express();
 const httpServer = require('http').createServer(app);
-const { Server } = require('socket.io');
+// const { Server } = require('socket.io');
 
-const io = new Server(httpServer);
+// const io = new Server(httpServer);
 
-// const io = require('socket.io')(3000, {
-//   cors: {
-//     origin: '*',
-//   },
-// });
+const io = require('socket.io')(httpServer, {
+  cors: {
+    origin: '*',
+  },
+});
+
+const cors = require('cors');
+
+app.use(cors());
 
 app.use(express.static(`${__dirname}/../client/dist`));
 app.use(express.json());
